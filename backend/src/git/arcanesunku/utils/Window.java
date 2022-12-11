@@ -1,6 +1,6 @@
 package git.arcanesunku.utils;
 
-import git.arcanesunku.utils.editor.TextMenuBar;
+import git.arcanesunku.utils.components.TextMenuBar;
 
 import javax.swing.*;
 import java.awt.*;

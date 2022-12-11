@@ -1,4 +1,4 @@
-package git.arcanesunku.utils.editor;
+package git.arcanesunku.utils.components;
 
 import javax.swing.*;
 import java.util.ArrayList;
