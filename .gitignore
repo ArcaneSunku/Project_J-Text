@@ -1,0 +1,6 @@
+# Project exclude paths
+/.gradle/
+/backend/build/
+/backend/build/classes/java/main/
+/jtext/build/
+/jtext/build/classes/java/main/

@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+
+    group 'git.arcanesunku.jtext'
+    version '1.0-SNAPSHOT'
+
+    ext {
+        appName = "J-Text"
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+    }
+}
+
+project(":jtext") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":backend")
+
+        implementation 'org.tinylog:tinylog-impl:2.5.0'
+        implementation 'org.tinylog:tinylog-api:2.5.0'
+        implementation 'org.tinylog:jsl-tinylog:2.5.0'
+    }
+}
+
+project(":backend") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation 'org.tinylog:tinylog-impl:2.5.0'
+        implementation 'org.tinylog:tinylog-api:2.5.0'
+        implementation 'org.tinylog:jsl-tinylog:2.5.0'
+    }
+}
