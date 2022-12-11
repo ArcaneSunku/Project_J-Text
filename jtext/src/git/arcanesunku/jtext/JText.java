@@ -6,6 +6,8 @@ import git.arcanesunku.utils.components.TextMenu;
 import git.arcanesunku.utils.components.TextMenuBar;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,6 +18,7 @@ public class JText {
 
     private File mFile;
     private JFileChooser mFileChooser;
+    private int mNewFileCounter;
 
     private JText() {
         Log.setLevel(Log.Level.INFO);
@@ -25,7 +28,10 @@ public class JText {
 
     private void setupWindow() {
         mFileChooser = new JFileChooser();
+        mFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Simple Text File", ".txt"));
+        mFileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Config File for Applications", ".properties", ".config", ".ini"));
 
+        mNewFileCounter = 1;
         mFile = new File("Untitled.txt");
         mWindow.setTitle(String.format(": %s", mFile.getName()), true);
 
@@ -134,7 +140,7 @@ public class JText {
     }
 
     private void createNewFile() {
-        mFile = new File("Untitled.txt");
+        mFile = new File(String.format("Untitled%d.txt", mNewFileCounter++));
         mWindow.setTitle(String.format(": %s", mFile.getName()), true);
     }
 
