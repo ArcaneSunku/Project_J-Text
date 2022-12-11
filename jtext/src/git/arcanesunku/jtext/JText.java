@@ -12,7 +12,9 @@ import java.io.IOException;
 public class JText {
 
     private final Window mWindow;
+
     private File mFile;
+    private JFileChooser mFileChooser;
 
     private JText() {
         mWindow = new Window("JText", 800, 400);
@@ -20,9 +22,11 @@ public class JText {
     }
 
     private void setupWindow() {
-        mFile = new File("Untitled.txt");
+        mFileChooser = new JFileChooser();
 
+        mFile = new File("Untitled.txt");
         mWindow.setTitle(String.format(": %s", mFile.getName()), true);
+
         populateMenuBar();
         mWindow.show();
     }
@@ -55,20 +59,24 @@ public class JText {
             JTextArea text_area = mWindow.getTextArea();
             String text_context = text_area.getText();
 
+            // We assume if we are saving that the file is intended for overwrite, that is if it exists
             if(!mFile.exists()) {
                 try {
-                    if(!mFile.createNewFile())
-                        throw new IOException(String.format("Failed to save [%s]!", mFile.getName()));
+                    if(shouldSave(mFile)) {
+                        mFile = mFileChooser.getSelectedFile();
+                        mWindow.setTitle(String.format(": %s", mFile.getName()), true);
 
-                    saveContent(mFile, text_context);
+                        if(!mFile.createNewFile())
+                            throw new IOException(String.format("Failed to save [%s]!", mFile.getName()));
+
+                        saveContent(mFile, text_context);
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     System.exit(0);
                 }
             } else {
-                if (JOptionPane.showConfirmDialog(null, String.format("File [%s] already exists! Do you want to overwrite it?", mFile.getName()), "File Overwrite?", JOptionPane.YES_NO_OPTION) == 0) {
-                    saveContent(mFile, text_context);
-                }
+                saveContent(mFile, text_context);
             }
         });
         file_menu.addMenuItem(save_file);
@@ -78,10 +86,33 @@ public class JText {
         file_menu.addMenuItem(exit_app);
 
         // Edit Context Menu
+        TextMenu edit_menu = new TextMenu("Edit");
 
+        JMenuItem undo = new JMenuItem("Undo");
+        undo.addActionListener(e -> {
+
+        });
+        edit_menu.add(undo);
+
+        // Help Context Menu
+        TextMenu help_menu = new TextMenu("Help");
+
+        JMenuItem about = new JMenuItem("About");
+        about.addActionListener(e -> {
+            JOptionPane.showMessageDialog(null, "J-Text is a text editor made with Java 17 by ArcaneSunku.\n" +
+                                                                        "It is entirely free and open-source.", "About", JOptionPane.PLAIN_MESSAGE);
+        });
+        help_menu.add(about);
 
         // Add context menus
         bar.add(file_menu);
+        bar.add(edit_menu);
+        bar.add(help_menu);
+    }
+
+    private boolean shouldSave(File file) {
+        mFileChooser.setSelectedFile(file);
+        return mFileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION;
     }
 
     private void saveContent(File file, String content) {
@@ -93,7 +124,7 @@ public class JText {
     }
 
     private void createNewFile() {
-        mFile = new File("New File.txt");
+        mFile = new File("Untitled.txt");
         mWindow.setTitle(String.format(": %s", mFile.getName()), true);
     }
 
