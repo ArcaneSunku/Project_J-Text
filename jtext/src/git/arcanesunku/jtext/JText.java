@@ -1,12 +1,12 @@
 package git.arcanesunku.jtext;
 
+import git.arcanesunku.Window;
 import git.arcanesunku.utils.Log;
-import git.arcanesunku.utils.Window;
-import git.arcanesunku.utils.components.TextMenu;
-import git.arcanesunku.utils.components.TextMenuBar;
+import git.arcanesunku.utils.SystemData;
+import git.arcanesunku.components.TextMenu;
+import git.arcanesunku.components.TextMenuBar;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,6 +24,14 @@ public class JText {
         Log.setLevel(Log.Level.INFO);
         mWindow = new Window("JText", 800, 400);
         setupWindow();
+
+        String localUserDir = String.format("%s\\.jtext", SystemData.getLocalUserDir());
+        File file = new File(localUserDir);
+        if(!file.isDirectory()) {
+            boolean dirMade = file.mkdir();
+            if(dirMade)
+                System.out.println("Directory Created!");
+        }
     }
 
     private void setupWindow() {
@@ -115,6 +123,12 @@ public class JText {
                                                                         "It is entirely free and open-source.", "About", JOptionPane.PLAIN_MESSAGE);
         });
         help_menu.add(about);
+
+        JMenuItem logFile = new JMenuItem("Log To File");
+        logFile .addActionListener(e -> {
+            Log.logToFile(!Log.loggingToFile());
+        });
+        help_menu.add(logFile);
 
         JMenuItem exit_app = new JMenuItem("Exit");
         exit_app.addActionListener(e -> mWindow.close());
